@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Album Kenangan Terindah 💖</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#ffd6e7,#fff1c7,#dff7ff);
+    color:#4a3542;
+}
+
+/* COVER */
+#cover{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    text-align:center;
+}
+
+.cover-box{
+    background:#fffdf7;
+    padding:45px 25px;
+    border:4px dashed #ff9fc1;
+    border-radius:30px;
+    width:95%;
+    max-width:700px;
+    box-shadow:0 15px 40px #9996;
+}
+
+.cover-box h1{
+    color:#ec6d9b;
+    font-size:clamp(38px,8vw,65px);
+}
+
+.cover-box h2{
+    margin:20px 0;
+    color:#555;
+}
+
+.cover-box p{
+    font-size:18px;
+    line-height:1.6;
+    margin-bottom:30px;
+}
+
+.open-btn{
+    border:0;
+    background:linear-gradient(135deg,#ff78a8,#ffb36b);
+    color:white;
+    padding:16px 28px;
+    border-radius:40px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ALBUM */
+#album{
+    display:none;
+    padding:20px 15px 80px;
+}
+
+header{
+    text-align:center;
+    padding:30px 10px;
+}
+
+header h1{
+    color:#e96899;
+    font-size:42px;
+}
+
+header p{
+    font-size:18px;
+    line-height:1.5;
+}
+
+.page{
+    max-width:900px;
+    margin:35px auto;
+    padding:25px;
+    background:#fffdf4;
+    border-radius:20px;
+    box-shadow:0 8px 25px #7775;
+}
+
+.page-title{
+    text-align:center;
+    color:#e86b94;
+    margin-bottom:20px;
+}
+
+.photo{
+    background:white;
+    padding:10px;
+    box-shadow:0 5px 15px #5554;
+    margin:20px auto;
+}
+
+.photo img{
+    width:100%;
+    display:block;
+    cursor:pointer;
+}
+
+.caption{
+    text-align:center;
+    font-size:20px;
+    margin:15px;
+    font-style:italic;
+}
+
+.memory-btn{
+    display:block;
+    margin:auto;
+    border:0;
+    background:#ff91b7;
+    color:white;
+    padding:11px 20px;
+    border-radius:30px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.memory{
+    display:none;
+    margin-top:20px;
+    padding:20px;
+    background:#fff0f6;
+    border:2px dashed #ef91b1;
+    border-radius:20px;
+    text-align:center;
+    line-height:1.6;
+}
+
+.formal-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.formal{
+    background:white;
+    padding:10px;
+    box-shadow:0 5px 15px #5554;
+}
+
+.formal img{
+    width:100%;
+    display:block;
+    cursor:pointer;
+}
+
+.formal p{
+    text-align:center;
+    padding:10px;
+    font-size:18px;
+}
+
+.video-box{
+    max-width:900px;
+    margin:25px auto;
+    background:white;
+    padding:12px;
+    border-radius:15px;
+}
+
+video{
+    width:100%;
+    display:block;
+    border-radius:10px;
+}
+
+.portrait{
+    max-width:430px;
+}
+
+.words{
+    max-width:850px;
+    margin:50px auto;
+    background:#fffdf7;
+    padding:30px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 8px 25px #5554;
+}
+
+.words h2{
+    color:#e96b97;
+    margin-bottom:15px;
+}
+
+.words p{
+    font-size:19px;
+    line-height:1.7;
+}
+
+/* MUSIK */
+.music{
+    position:fixed;
+    right:15px;
+    bottom:15px;
+    z-index:100;
+}
+
+.music button{
+    width:55px;
+    height:55px;
+    border:0;
+    border-radius:50%;
+    background:#ff83ae;
+    color:white;
+    font-size:23px;
+}
+
+/* ================= ZOOM ================= */
+
+#lightbox{
+    display:none;
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.96);
+    z-index:9999;
+}
+
+#zoomArea{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    touch-action:none;
+}
+
+#zoomedImage{
+    max-width:90%;
+    max-height:75%;
+    object-fit:contain;
+    border:5px solid white;
+    user-select:none;
+    -webkit-user-drag:none;
+    touch-action:none;
+    transform-origin:center;
+}
+
+.close{
+    position:absolute;
+    right:20px;
+    top:10px;
+    color:white;
+    font-size:50px;
+    z-index:10001;
+    cursor:pointer;
+}
+
+.zoom-buttons{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:10px;
+    z-index:10002;
+}
+
+.zoom-buttons button{
+    width:55px;
+    height:55px;
+    border:0;
+    border-radius:50%;
+    background:white;
+    font-size:25px;
+    font-weight:bold;
+    color:#e96899;
+}
+
+.help{
+    position:absolute;
+    top:65px;
+    left:0;
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:13px;
+}
+
+/* HP */
+@media(max-width:600px){
+
+    .formal-grid{
+        grid-template-columns:1fr;
+    }
+
+    header h1{
+        font-size:35px;
+    }
+
+    .page{
+        padding:18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- COVER -->
+<section id="cover">
+
+<div class="cover-box">
+
+<div style="font-size:50px;">
+📸 💐 🎀
+</div>
+
+<h1>Album Kenangan</h1>
+
+<h2>
+“Kenangan Terindah yang Tidak Akan Pernah Hilang”
+</h2>
+
+<p>
+Ada foto yang cuma berisi gambar,<br>
+tapi ada juga foto yang menyimpan<br>
+<b>seribu cerita.</b> 🥹💗
+</p>
+
+<button class="open-btn" onclick="bukaAlbum()">
+💌 KLIK UNTUK MEMBUKA 💌
+</button>
+
+</div>
+</section>
+
+
+<!-- ALBUM -->
+<div id="album">
+
+<header>
+
+<h1>✨ Kenangan Kita ✨</h1>
+
+<p>
+"Tiga tahun bukan waktu yang sebentar. Terima kasih sudah jadi alasan di balik tawa setiap hari selama di SMP."
+</p>
+
+</header>
+
+
+<!-- MEMORY 1 -->
+<div class="page">
+
+<h2 class="page-title">
+🌸 Halaman 01 — Moment Random 🌸
+</h2>
+
+<div class="photo">
+<img src="https://cdn.phototourl.com/member/2026-09-09-4ad4ab53-7fcf-473a-93ef-7b5dfa88a79f.jpg"
+onclick="zoomImage(this.src)"
+alt="Foto 1">
+</div>
+
+<p class="caption">
+“Mendekati kelulusan semuanya jadi lebih kompak...”
+</p>
+
+<button class="memory-btn"
+onclick="cerita('m1')">
+💌 Buka ceritanya
+</button>
+
+<div class="memory" id="m1">
+
+Kadang kita tidak sadar kalau sebuah hari biasa
+ternyata sedang berubah menjadi sebuah kenangan
+yang nantinya paling sering kita rindukan.
+
+<br><br>
+
+<b>“LHO KOK KANGEN? 😭😂”</b>
+
+</div>
+
+</div>
+
+
+<!-- MEMORY 2 -->
+<div class="page">
+
+<h2 class="page-title">
+🎀 Halaman 02 — Before Juara Drama 🎀
+</h2>
+
+<div class="photo">
+<img src="https://cdn.phototourl.com/member/2026-09-09-074423ba-d93d-4281-8b8e-e4e4aee0d503.jpg"
+onclick="zoomImage(this.src)"
+alt="Foto 2">
+</div>
+
+<p class="caption">
+“Tidak selalu sempurna, tapi selalu berharga.”
+</p>
+
+<button class="memory-btn"
+onclick="cerita('m2')">
+💖 Buka kenangannya
+</button>
+
+<div class="memory" id="m2">
+
+Ada momen yang tidak perlu direncanakan.
+Tidak perlu mewah.
+Bahkan kadang absurd dan tidak jelas. 😂
+
+<br><br>
+
+Tapi justru momen seperti itulah yang menjadi
+cerita paling seru untuk diceritakan lagi.
+
+<br><br>
+
+<b>
+“Dulu ketawa bareng, sekarang lihat fotonya
+malah ketawa sambil keinget kenangannya” 🥹
+</b>
+
+</div>
+
+</div>
+
+
+<!-- MEMORY 3 -->
+<div class="page">
+
+<h2 class="page-title">
+🌷 Halaman 03 — Yang Akan Selalu Diingat 🌷
+</h2>
+
+<div class="photo">
+<img src="https://cdn.phototourl.com/member/2026-09-09-5853b1dc-ba49-477d-9d49-1fada0234523.jpg"
+onclick="zoomImage(this.src)"
+alt="Foto 3">
+</div>
+
+<p class="caption">
+“Kalau waktu bisa diulang, aku ingin kembali ke sini.”
+</p>
+
+<button class="memory-btn"
+onclick="cerita('m3')">
+🥹 Buka pesan rahasia
+</button>
+
+<div class="memory" id="m3">
+
+Mungkin waktu akan terus berjalan.
+Kita akan tumbuh, berubah, dan punya kesibukan masing-masing.
+
+<br><br>
+
+Tapi semoga suatu hari nanti,
+ketika kita melihat foto-foto ini lagi,
+kita masih bisa berkata:
+
+<br><br>
+
+<b>
+“Ternyata kita pernah sebahagia itu.” 💗
+</b>
+
+</div>
+
+</div>
+
+
+<!-- FOTO FORMAL -->
+<section class="page">
+
+<h2 class="page-title">
+📸 4 Moment SMP 📸
+</h2>
+
+<div class="formal-grid">
+
+<div class="formal">
+<img src="https://cdn.phototourl.com/free/2026-09-09-7dfa4ae4-338b-4ee6-bd54-5a42dadf6af6.jpg"
+onclick="zoomImage(this.src)">
+<p>MPLS ERA</p>
+</div>
+
+<div class="formal">
+<img src="https://cdn.phototourl.com/free/2026-09-09-5a8bb123-cf13-48f0-a68b-dd72410a1d21.jpg"
+onclick="zoomImage(this.src)">
+<p>UTAS ERA</p>
+</div>
+
+<div class="formal">
+<img src="https://cdn.phototourl.com/member/2026-09-09-00ba2465-3874-4fff-9b8f-17773a673b28.jpg"
+onclick="zoomImage(this.src)">
+<p>AUD ERA</p>
+</div>
+
+<div class="formal">
+<img src="https://cdn.phototourl.com/member/2026-09-09-6778683f-9446-497c-8c40-518c9f856d4f.jpg"
+onclick="zoomImage(this.src)">
+<p>AGIT ERA</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- VIDEO LANDSCAPE -->
+<section class="page">
+
+<h2 class="page-title">
+🎬 Captured Moments
+</h2>
+
+<div class="video-box">
+
+<video controls playsinline>
+<source src="https://yourimageshare.com/ib/feSwse0eZX.mp4"
+type="video/mp4">
+Video tidak dapat diputar.
+</video>
+
+</div>
+
+</section>
+
+
+<!-- VIDEO PORTRAIT -->
+<section class="page">
+
+<h2 class="page-title">
+  Random Memory Dump
+</h2>
+
+<div class="video-box portrait">
+
+<video controls playsinline>
+<source src="https://yourimageshare.com/ib/d3zaCTRCQ6.mp4"
+type="video/mp4">
+Video tidak dapat diputar.
+</video>
+
+</div>
+
+</section>
+
+
+<!-- KATA KATA -->
+<section class="words">
+
+<h2>💌 Untuk Semua Kenangan</h2>
+
+<p>
+
+“Terima kasih untuk semua tawa,
+semua cerita, semua kekonyolan,
+dan semua momen yang pernah kita lewati.”
+
+<br><br>
+
+“Mungkin kita tidak bisa menghentikan waktu,
+tapi kita bisa menyimpan kenangan.”
+
+<br><br>
+
+“Suatu hari nanti kita mungkin akan lupa
+detail-detail kecilnya,
+tapi semoga kita tidak pernah lupa
+bagaimana rasanya bahagia bersama.” 💗
+
+</p>
+
+</section>
+
+
+<!-- MUSIC -->
+<div class="music">
+
+<button onclick="musik()"
+id="musicButton">
+🎵
+</button>
+
+<audio id="musicPlayer" loop>
+<source src="https://e.top4top.io/m_3904kzl090.mp3"
+type="audio/mpeg">
+</audio>
+
+</div>
+
+</div>
+
+
+<!-- ================= LIGHTBOX ================= -->
+
+<div id="lightbox">
+
+<span class="close"
+onclick="tutupZoom()">×</span>
+
+<div class="help">
+🔍 Tekan + lalu tahan foto dan geser dengan jari
+</div>
+
+<div id="zoomArea">
+
+<img id="zoomedImage">
+
+</div>
+
+<div class="zoom-buttons">
+
+<button onclick="kurangZoom()">−</button>
+
+<button onclick="resetZoom()">⟳</button>
+
+<button onclick="tambahZoom()">+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* BUKA ALBUM */
+
+function bukaAlbum(){
+
+document.getElementById("cover").style.display="none";
+
+document.getElementById("album").style.display="block";
+
+}
+
+
+/* CERITA */
+
+function cerita(id){
+
+var box=document.getElementById(id);
+
+if(box.style.display==="block"){
+
+box.style.display="none";
+
+}else{
+
+box.style.display="block";
+
+}
+
+}
+
+
+/* MUSIK */
+
+function musik(){
+
+var audio=document.getElementById("musicPlayer");
+
+var btn=document.getElementById("musicButton");
+
+if(audio.paused){
+
+audio.play();
+
+btn.innerHTML="🔊";
+
+}else{
+
+audio.pause();
+
+btn.innerHTML="🔇";
+
+}
+
+}
+
+
+/* ========================= */
+/* ZOOM FOTO */
+/* ========================= */
+
+var zoom=1;
+
+var x=0;
+
+var y=0;
+
+var sedangGeser=false;
+
+var awalX=0;
+
+var awalY=0;
+
+
+function zoomImage(src){
+
+var lightbox=
+document.getElementById("lightbox");
+
+var image=
+document.getElementById("zoomedImage");
+
+zoom=1;
+
+x=0;
+
+y=0;
+
+image.src=src;
+
+ubahFoto();
+
+lightbox.style.display="block";
+
+document.body.style.overflow="hidden";
+
+}
+
+
+function ubahFoto(){
+
+var image=
+document.getElementById("zoomedImage");
+
+image.style.transform=
+"translate("+x+"px,"+y+"px) scale("+zoom+")";
+
+}
+
+
+/* TAMBAH ZOOM */
+
+function tambahZoom(){
+
+zoom=zoom+0.5;
+
+if(zoom>5){
+
+zoom=5;
+
+}
+
+ubahFoto();
+
+}
+
+
+/* KURANG ZOOM */
+
+function kurangZoom(){
+
+zoom=zoom-0.5;
+
+if(zoom<=1){
+
+zoom=1;
+
+x=0;
+
+y=0;
+
+}
+
+ubahFoto();
+
+}
+
+
+/* RESET */
+
+function resetZoom(){
+
+zoom=1;
+
+x=0;
+
+y=0;
+
+ubahFoto();
+
+}
+
+
+/* TUTUP */
+
+function tutupZoom(){
+
+document.getElementById("lightbox")
+.style.display="none";
+
+document.body.style.overflow="";
+
+zoom=1;
+
+x=0;
+
+y=0;
+
+}
+
+
+/* ========================= */
+/* GESER FOTO */
+/* ========================= */
+
+var foto=
+document.getElementById("zoomedImage");
+
+
+foto.addEventListener(
+"pointerdown",
+function(e){
+
+if(zoom<=1){
+
+return;
+
+}
+
+e.preventDefault();
+
+sedangGeser=true;
+
+awalX=e.clientX-x;
+
+awalY=e.clientY-y;
+
+foto.setPointerCapture(
+e.pointerId
+);
+
+}
+);
+
+
+foto.addEventListener(
+"pointermove",
+function(e){
+
+if(!sedangGeser){
+
+return;
+
+}
+
+e.preventDefault();
+
+x=e.clientX-awalX;
+
+y=e.clientY-awalY;
+
+ubahFoto();
+
+}
+);
+
+
+foto.addEventListener(
+"pointerup",
+function(e){
+
+sedangGeser=false;
+
+try{
+
+foto.releasePointerCapture(
+e.pointerId
+);
+
+}catch(err){}
+
+}
+);
+
+
+/* ESC */
+
+document.addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Escape"){
+
+tutupZoom();
+
+}
+
+}
+);
+
+</script>
+
+</body>
+</html>
